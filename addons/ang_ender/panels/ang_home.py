@@ -45,7 +45,8 @@ class Panel(AngPanel):
         files.set_size_request(int(cw * 0.36), -1)
         files.connect("clicked", lambda *_: self.open("print"))
         fbox = Gtk.Box(spacing=int(fs * 0.6), halign=Gtk.Align.CENTER)
-        self.labels["thumb"] = gtk.Image("file", fs * 3.2, fs * 3.2)
+        # рендер files_card.png, ако го има; иначе нашата рисунка на корабче
+        self.labels["thumb"] = self._files_art(int(fs * 6.0), int(fs * 4.6))
         fbox.pack_start(self.labels["thumb"], False, False, 0)
         ftext = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, valign=Gtk.Align.CENTER)
         ftext.add(ui.label("Файлове", "ang-card-title"))
@@ -65,6 +66,17 @@ class Panel(AngPanel):
 
         self.content.add(root)
         self._find_latest_file()
+
+    def _files_art(self, w, h):
+        if os.path.exists(ui.render_path("files_card")):
+            return ui.Render("files_card", w, h)
+        try:
+            from gi.repository import GdkPixbuf
+
+            pb = GdkPixbuf.Pixbuf.new_from_file_at_size(os.path.join(ui.ADDON_DIR, "assets", "boat.svg"), w, h)
+            return Gtk.Image.new_from_pixbuf(pb)
+        except Exception:
+            return self._gtk.Image("file", h, h)
 
     def _temps_cell(self, parent):
         """Един бутон с трите температури (дюза, легло, камера) -> Управление."""
@@ -143,13 +155,6 @@ class Panel(AngPanel):
         latest = max(files, key=lambda f: f.get("modified", 0))
         self.latest_file = latest["path"]
         self.labels["file_hint"].set_text(os.path.splitext(os.path.basename(self.latest_file))[0])
-        size = self._gtk.font_size * 3.2
-
-        def set_thumb(pixbuf):
-            if pixbuf is not None:
-                self.labels["thumb"].set_from_pixbuf(pixbuf)
-
-        self.load_image_async(self.latest_file, size, size, callback=set_thumb)
 
     def activate(self):
         self._find_latest_file()
