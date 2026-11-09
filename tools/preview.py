@@ -18,7 +18,7 @@ os.chdir(KS)
 css = open(BASE).read().replace("KS_FONT_SIZE", f"{FS}")
 css += open(os.path.join(THEME_DIR, "style.css")).read()
 # KlipperScreen sets these per device from style.conf graph_colors; emulate:
-css += ".gl-hot{border-left-color:#FF6A3D}.gl-bed{border-left-color:#2F9BFF}.gl-fan{border-left-color:#00AE42}.gl-x{border-left-color:#FFB020}"
+css += ".gl-hot{border-left-color:#FF6A3D}.gl-bed{border-left-color:#2F9BFF}.gl-fan{border-left-color:#A5F960}.gl-x{border-left-color:#FFB020}"
 css = css.replace("./styles/ang-bambu/", THEME_DIR.rstrip("/") + "/")
 prov = Gtk.CssProvider()
 prov.load_from_data(css.encode())
@@ -54,23 +54,25 @@ def lbl(text, cls=None, xalign=0.0):
 
 def frame(title, content):
     """KlipperScreen layout: action bar left (10%), title bar on top, content."""
-    root = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-    ab = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, homogeneous=True)
+    # Same structure as KlipperScreen panels/base_panel.py (horizontal mode)
+    root = Gtk.Grid()
+    ab = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5, homogeneous=True, vexpand=True, hexpand=False)
     ab.get_style_context().add_class("action_bar")
     ab.set_size_request(int(W * 0.1), H)
     for i in ["back", "main", "emergency", "settings"]:
-        ab.add(btn(i, scale=0.7))
-    right = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-    tb = Gtk.Box(spacing=10)
+        b = btn(i, scale=0.7)
+        b.set_hexpand(False)
+        ab.add(b)
+    tb = Gtk.Box(spacing=5, valign=Gtk.Align.CENTER)
     tb.get_style_context().add_class("title_bar")
     tb.set_size_request(-1, int(FS * 2))
     tb.pack_start(lbl("  " + title), True, True, 0)
     tb.pack_end(lbl("14:32  ", xalign=1.0), False, False, 0)
-    right.pack_start(tb, False, False, 0)
     content.get_style_context().add_class("content")
-    right.pack_start(content, True, True, 0)
-    root.pack_start(ab, False, False, 0)
-    root.pack_start(right, True, True, 0)
+    content.set_size_request(W - int(W * 0.1), H - int(FS * 2))
+    root.attach(tb, 1, 0, 1, 1)
+    root.attach(content, 1, 1, 1, 1)
+    root.attach(ab, 0, 0, 1, 2)
     return root
 
 
