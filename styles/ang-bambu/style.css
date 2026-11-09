@@ -87,6 +87,11 @@ button.color4:active {
     border-bottom-width: .1em;
 }
 
+button.button_active,
+button.color1.button_active,
+button.color2.button_active,
+button.color3.button_active,
+button.color4.button_active,
 .button_active {
     background-color: @accent-dark;
     border: .15em solid @accent;
