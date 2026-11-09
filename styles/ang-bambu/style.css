@@ -1,0 +1,346 @@
+/*
+ * ANG Bambu — тема за KlipperScreen, вдъхновена от интерфейса на Bambu Lab.
+ * Оптимизирана за 4.3" 800x480 тъч екран.
+ * Иконите са базирани на material-dark (KlipperScreen, AGPL-3.0).
+ */
+
+/* ---------- Палитра ---------- */
+@define-color text        #F2F2F2;
+@define-color text-dim    #9A9A9A;
+@define-color bg          #161616;
+@define-color card        #242424;
+@define-color card-hi     #2E2E2E;
+@define-color card-press  #383838;
+@define-color accent      #00AE42;   /* Bambu зелено */
+@define-color accent-dark #0B3D1F;
+@define-color hot         #FF6A3D;   /* дюза */
+@define-color bed         #2F9BFF;   /* легло */
+@define-color fanc        #00AE42;
+
+@define-color echo    #00AE42;
+@define-color warning #F5A623;
+@define-color error   #E5484D;
+
+@define-color buttons-bg  @card;
+@define-color active      @accent;
+@define-color active-dark @card-hi;
+@define-color lines       #3A3A3A;
+
+/* ---------- Основа ---------- */
+* {
+    color: @text;
+}
+
+window,
+junction,
+list row,
+treeview.view {
+    background-color: @bg;
+}
+
+label {
+    color: @text;
+}
+
+/* ---------- Бутони (плочки) ---------- */
+button {
+    background-color: @card;
+    background-image: none;
+    border: none;
+    border-radius: .7em;
+    margin: .2em;
+    padding: .3em;
+    box-shadow: none;
+}
+
+button:hover {
+    background-color: @card-hi;
+}
+
+button:active,
+button.active,
+.horizontal_togglebuttons_active {
+    background-color: @card-press;
+}
+
+/* Цветните бутони на KlipperScreen стават неутрални плочки
+   с тънка цветна черта отдолу — като категориите при Bambu */
+button.color1,
+button.color2,
+button.color3,
+button.color4 {
+    background-color: @card;
+    border: none;
+    border-bottom: .18em solid @lines;
+    border-radius: .7em;
+}
+button.color1 { border-bottom-color: @accent; }
+button.color2 { border-bottom-color: @hot; }
+button.color3 { border-bottom-color: @warning; }
+button.color4 { border-bottom-color: @bed; }
+
+button.color1:active,
+button.color2:active,
+button.color3:active,
+button.color4:active {
+    background-color: @card-press;
+    border-bottom-width: .1em;
+}
+
+.button_active {
+    background-color: @accent-dark;
+    border: .15em solid @accent;
+    border-radius: .7em;
+}
+
+button:focus,
+button.color1:focus,
+button.color2:focus,
+button.color3:focus,
+button.color4:focus,
+.dialog button:focus {
+    outline: .1em solid @accent;
+    outline-offset: .05em;
+}
+
+button.update,
+button.invalid {
+    background-color: @card;
+    border: 0;
+    border-bottom: .2em solid;
+    border-radius: .7em;
+}
+button.update  { border-bottom-color: @echo; }
+button.invalid { border-bottom-color: @error; }
+
+/* ---------- Горна и долна лента ---------- */
+.title_bar {
+    background-color: @bg;
+    color: @text-dim;
+}
+
+.action_bar {
+    background-color: @bg;
+}
+
+.action_bar button {
+    background-color: transparent;
+    border-radius: .6em;
+}
+
+.action_bar button:active {
+    background-color: @card;
+}
+
+/* ---------- Превключватели, полета, менюта ---------- */
+menu,
+menuitem,
+combobox button,
+combobox menuitem,
+popover {
+    background-color: @card-hi;
+    border-color: @bg;
+    border-radius: .5em;
+}
+
+entry {
+    background-color: @card;
+    border: .1em solid @lines;
+    border-radius: .5em;
+}
+
+entry:focus {
+    border-color: @accent;
+}
+
+treeview.view check,
+switch {
+    background-color: @card-hi;
+    border-radius: 1em;
+}
+
+treeview.view check:checked,
+switch:checked {
+    background-color: @accent;
+}
+
+treeview.view check:checked {
+    -gtk-icon-source: url("./styles/ang-bambu/images/complete.svg");
+}
+
+/* ---------- Плъзгачи и прогрес ---------- */
+trough {
+    background-color: @card-hi;
+    border-radius: 1em;
+    color: @text;
+}
+
+trough highlight,
+trough progress {
+    background-color: @accent;
+    border-color: @bg;
+    border-radius: 1em;
+    color: @text;
+}
+
+scale slider {
+    background-color: @text;
+    border-radius: 50%;
+}
+
+scale-mark {
+    color: @text-dim;
+}
+
+scrollbar,
+scrollbar button,
+scrollbar trough {
+    background-color: @bg;
+}
+
+scrollbar slider {
+    background-color: @card-press;
+    border-radius: 1em;
+}
+
+textview .time {
+    color: @text-dim;
+}
+
+/* ---------- Нагреватели / температурна мрежа ---------- */
+.heater-grid button {
+    background-color: @card;
+    border-radius: .7em;
+}
+
+.heater-grid label {
+    color: @text;
+}
+
+.graph_label {
+    border-left-width: .3em;
+}
+
+.frame-item {
+    background-color: @card;
+    border-radius: .7em;
+}
+
+/* ---------- Екран „Печат“ ---------- */
+.printing-filename {
+    color: @text;
+    font-weight: bold;
+}
+
+.printing-status,
+.printing-status-label {
+    color: @text-dim;
+}
+
+.printing-progress-text {
+    color: @accent;
+    font-weight: bold;
+}
+
+.printing-thumbnail {
+    background-color: @card;
+    border-radius: .7em;
+}
+
+.printing-info button,
+.printing-info-secondary {
+    background-color: @card;
+    border-radius: .7em;
+}
+
+.printing-info-secondary label {
+    color: @text;
+}
+
+.fan_slider {
+    color: @text;
+}
+
+/* ---------- Таб-бутони (напр. стъпки на движение) ---------- */
+.horizontal_togglebuttons {
+    background-color: @card;
+    border-color: @bg;
+}
+
+.horizontal_togglebuttons_active {
+    background-color: @accent;
+}
+
+.horizontal_togglebuttons_active label {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+/* ---------- Диалози и съобщения ---------- */
+.dialog {
+    background-color: @card;
+    border: none;
+    border-radius: .8em;
+}
+
+.dialog button {
+    background-color: @card-hi;
+    border-radius: .7em;
+}
+
+.dialog-error     { border-bottom-color: @error; }
+.dialog-warning   { border-bottom-color: @warning; }
+.dialog-info      { border-bottom-color: @bed; }
+.dialog-default   { border-bottom-color: @lines; }
+.dialog-secondary { border-bottom-color: @hot; }
+.dialog-primary   { border-bottom-color: @accent; }
+
+.message_popup {
+    border-bottom-color: @accent;
+    border-radius: .6em;
+}
+
+.message_popup_echo,
+.message_popup_echo button {
+    background-color: @echo;
+}
+
+.message_popup_warning,
+.message_popup_warning button {
+    background-color: @warning;
+}
+
+.message_popup_error,
+.message_popup_error button {
+    background-color: @error;
+}
+
+.message {
+    background-color: @error;
+    border-color: @error;
+    color: @text;
+}
+
+.message button {
+    background-color: @text;
+    color: @bg;
+}
+
+.warning { background-color: @warning; }
+.error   { background-color: @error; }
+
+/* ---------- Клавиатура и numpad ---------- */
+.numpad_key {
+    background-color: @card;
+    border-color: @bg;
+    border-radius: .5em;
+}
+
+.keyboard_pad {
+    background-color: @bg;
+}
+
+.keyboard_pad button {
+    background-color: @card;
+    border-radius: .5em;
+}
