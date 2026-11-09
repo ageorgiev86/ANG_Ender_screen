@@ -50,13 +50,15 @@ DATA = {
                     "info": {"current_layer": 42, "total_layer": 120}},
     "virtual_sdcard": {"progress": 0.37},
     "amf": {
-        "active_slot": 1, "max_slots": 4,
+        "active_slot": 1, "max_slots": 6,
         "profiles": ["PLA", "PETG", "ABS", "ASA", "TPU", "PC"],
         "slots": {
             "0": {"filament": True, "color": "F2F2F2", "profile": "PLA", "humidity": 18, "online": True, "temperature": 26},
             "1": {"filament": True, "color": "3DA5FF", "profile": "PETG", "humidity": 22, "online": True, "temperature": 26},
             "2": {"filament": True, "color": "FF7A1A", "profile": "PLA", "humidity": 34, "online": True, "temperature": 48, "target_temp": 55, "drying": True},
             "3": {"filament": False, "online": True, "humidity": 20},
+            "4": {"filament": True, "color": "4CAF50", "profile": "TPU", "humidity": 25, "online": True},
+            "5": {"filament": True, "color": "161616", "profile": "PC", "humidity": 12, "online": True},
         },
     },
 }
@@ -128,6 +130,7 @@ PAGES = [
     ("07-motion", "ang_motion", "control", {}),
     ("08-speed", "ang_speed", "control", {}),
     ("09-amf", "ang_amf", "amf", {}),
+    ("09b-amf-page2", "ang_amf", "amf", {"_page": 1}),
     ("10-amf-edit", "ang_amf_edit", "amf", {"slot": 1}),
     ("11-amf-dry", "ang_amf_dry", "amf", {"slot": 1}),
     ("12-device", "ang_device", "device", {}),
@@ -141,8 +144,11 @@ if ONLY:
 def build(module, kwargs):
     kwargs = dict(kwargs)
     title = kwargs.pop("title", None)
+    page = kwargs.pop("_page", None)
     mod = importlib.import_module(f"ks_addons.ang_ender.panels.{module}")
     panel = mod.Panel(screen, title, **kwargs)
+    if page is not None:
+        panel._goto(None, page)
     if hasattr(panel, "process_update"):
         panel.process_update("notify_status_update", DATA)
     return panel

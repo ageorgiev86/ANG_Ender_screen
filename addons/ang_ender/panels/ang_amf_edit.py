@@ -20,7 +20,7 @@ class Panel(AngPanel):
         self.color = (s.get("color") or "").lstrip("#").upper() or None
 
         root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=int(fs * 0.4))
-        name = "Външна" if slot == "ext" else f"A{int(slot) + 1}"
+        name = f"слот {int(slot) + 1}"
         root.add(ui.page_header(f"Редакция на филамент · {name}", self.back))
         card = Gtk.Grid(row_spacing=int(fs * 0.7), column_spacing=int(fs * 0.8), vexpand=True)
         card.get_style_context().add_class("ang-card")

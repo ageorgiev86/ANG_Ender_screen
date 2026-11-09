@@ -14,7 +14,7 @@ class Panel(AngPanel):
         s = (self.stat("amf", "slots", {}) or {}).get(str(slot), {})
 
         root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=int(fs * 0.4))
-        root.add(ui.page_header(f"Сушене и влажност · A{int(slot) + 1}", self.back))
+        root.add(ui.page_header(f"Сушене и влажност · слот {int(slot) + 1}", self.back))
         card = Gtk.Box(spacing=int(fs * 1.5), vexpand=True)
         card.get_style_context().add_class("ang-card")
         card.get_style_context().add_class("ang-pad")

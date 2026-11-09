@@ -27,6 +27,7 @@
 | ![](docs/preview/01-home.png) | ![](docs/preview/02-control.png) | ![](docs/preview/03-air.png) |
 | ![](docs/preview/04-fan-part.png) | ![](docs/preview/05-nozzle.png) | ![](docs/preview/06-numpad-bed.png) |
 | ![](docs/preview/07-motion.png) | ![](docs/preview/08-speed.png) | ![](docs/preview/09-amf.png) |
+| ![](docs/preview/09b-amf-page2.png) | | |
 | ![](docs/preview/10-amf-edit.png) | ![](docs/preview/11-amf-dry.png) | ![](docs/preview/12-device.png) |
 | ![](docs/preview/13-calibration.png) | ![](docs/preview/14-printing.png) | |
 
