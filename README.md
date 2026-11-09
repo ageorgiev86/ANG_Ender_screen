@@ -11,26 +11,29 @@
 - избран елемент: синя рамка и тъмносин фон
 - иконите засега са от `material-dark` и ще бъдат заменени
 
-**Добавка `ang_ender`** (`addons/ang_ender/`):
-- изчистен начален екран: илюстрация на принтера, поздрав, карта „Файлове“ и карта със състояние (дюза, легло, мрежа, меню)
-- „Меню“ отваря стандартното главно меню на KlipperScreen (Home, Движение, Калибрация…)
-- зарежда се чрез вградения механизъм за добавки на KlipperScreen (`enable_addons`), без промени по кода му
+**Добавка `ang_ender`** (`addons/ang_ender/`), зарежда се чрез вградения механизъм за добавки на KlipperScreen (`enable_addons`), без промени по кода му:
+- лява навигация: Начало · Управление · AMF · Устройство · Съобщения · авариен стоп
+- страници: начало, управление, въздух, вентилатор, дюза и екструдер, температура (numpad), движение, скорост, AMF, редакция на слот, сушене, устройство, списъци (калибрация, инструменти), печат
+- местата за рендери се попълват сами, щом сложиш PNG файловете — [docs/RENDERS.md](docs/RENDERS.md)
+- имената на обектите в Klipper (камера, вентилатори, светлина) са в `addons/ang_ender/config.py`
+- екранът по време на печат (`ang_job`) е готов, но още **не** замества стандартния — включва се в `OVERRIDES` в `addons/ang_ender/__init__.py`
 
 ## Как изглежда
-Снимки 800×480 с реалния GTK CSS на темата. Това не са снимки от работещ KlipperScreen: началният екран е истинският панел с изкуствени данни, а другите три са приблизителни макети.
+Снимки 800×480 от истинския код на страниците с изкуствени данни за принтера (`tools/preview_pages.py`).
+Пунктирните рамки са местата за рендерите от SolidWorks — списъкът е в [docs/RENDERS.md](docs/RENDERS.md).
 
-**Начален екран** (истинският код на панела, с изкуствени данни):
-
-![](docs/preview/0-home.png)
-
-| Меню | Печат | Температура |
+| | | |
 |---|---|---|
-| ![](docs/preview/1-main-menu.png) | ![](docs/preview/2-printing.png) | ![](docs/preview/3-temperature.png) |
+| ![](docs/preview/01-home.png) | ![](docs/preview/02-control.png) | ![](docs/preview/03-air.png) |
+| ![](docs/preview/04-fan-part.png) | ![](docs/preview/05-nozzle.png) | ![](docs/preview/06-numpad-bed.png) |
+| ![](docs/preview/07-motion.png) | ![](docs/preview/08-speed.png) | ![](docs/preview/09-amf.png) |
+| ![](docs/preview/10-amf-edit.png) | ![](docs/preview/11-amf-dry.png) | ![](docs/preview/12-device.png) |
+| ![](docs/preview/13-calibration.png) | ![](docs/preview/14-printing.png) | |
 
-Прегенериране (нужни са GTK3 и Xvfb):
+Прегенериране (нужни са GTK3, python3-gi-cairo и Xvfb):
 
 ```bash
-xvfb-run -a -s "-screen 0 800x480x24" python3 tools/preview.py ~/KlipperScreen/styles/base.css $PWD/styles/ang-bambu $PWD/docs/preview
+xvfb-run -a -s "-screen 0 800x480x24" python3 tools/preview_pages.py ~/KlipperScreen $PWD $PWD/docs/preview
 ```
 
 ## Инсталация
@@ -66,7 +69,8 @@ cd ~/ANG_Ender_screen && git pull
 - [x] Тема: цветове и форми
 - [ ] Собствени икони в стил Bambu
 - [x] Изчистен начален екран
-- [ ] Нов екран по време на печат (миниатюра, прогрес, оставащо време, слой)
+- [x] Страници за управление, AMF и устройство (чакат рендерите)
+- [ ] Изпробване на истинския принтер и включване на екрана по време на печат
 - [ ] Плочки за температури и вентилатори
 
 ## Лиценз

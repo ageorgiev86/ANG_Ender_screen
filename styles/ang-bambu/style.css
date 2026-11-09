@@ -438,3 +438,294 @@ button.ang-cell:active {
     font-size: 1.1em;
     color: @text;
 }
+
+/* =====================================================================
+   ANG Ender страници (добавка ang_ender)
+   ===================================================================== */
+
+/* ---------- Лява навигация ---------- */
+.ang-action-bar {
+    background-color: @card;
+    padding: .3em 0;
+}
+
+button.ang-nav-btn {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: .7em;
+    margin: .25em .5em;
+    opacity: .55;
+}
+
+button.ang-nav-btn.ang-nav-active {
+    opacity: 1;
+    background-color: @accent-dark;
+    border: .06em solid @glow-edge;
+    box-shadow: 0 0 .7em @glow-strong;
+}
+
+button.ang-nav-estop {
+    opacity: 1;
+}
+
+/* ---------- Страница и заглавие ---------- */
+.ang-page {
+    padding: .35em .45em .45em .35em;
+}
+
+.ang-header {
+    min-height: 2.2em;
+}
+
+.ang-title {
+    font-size: 1.15em;
+    color: @text;
+}
+
+button.ang-back {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    font-size: 1.6em;
+    padding: 0 .4em;
+    margin: 0;
+}
+
+button.ang-primary {
+    background-color: @accent;
+    border: none;
+    box-shadow: 0 0 .7em @glow-strong;
+    padding: .3em 1.1em;
+}
+
+button.ang-primary label {
+    color: @on-accent;
+    font-weight: bold;
+}
+
+button.ang-secondary {
+    background-color: @card-hi;
+    padding: .3em 1.1em;
+}
+
+.ang-pad {
+    padding: .5em .7em;
+}
+
+/* ---------- Текстове ---------- */
+.ang-caption        { color: @text-dim; font-size: .85em; }
+.ang-caption-strong { color: @text; }
+.ang-value          { color: @text; font-size: 1.25em; }
+.ang-big            { color: @text; font-size: 1.5em; font-weight: bold; }
+.ang-chevron        { color: @text-dim; font-size: 1.4em; }
+
+/* ---------- Карти ---------- */
+button.ang-info-card {
+    padding: .3em .6em;
+}
+
+.ang-icon-circle {
+    background-color: @card-hi;
+    border-radius: 50%;
+}
+
+.ang-pill {
+    background-color: rgba(20, 20, 20, 0.85);
+    border: .06em solid @glow-edge;
+    border-radius: 2em;
+    padding: .2em .4em .2em .7em;
+    margin: .4em;
+}
+
+button.ang-flat {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+}
+
+button.ang-row {
+    padding: .2em .8em;
+    border-radius: .5em;
+}
+.ang-row-name  { color: @text; }
+.ang-row-value { color: @text-dim; }
+
+/* ---------- Сегментиран избор ---------- */
+.ang-segment {
+    background-color: @card-hi;
+    border-radius: .6em;
+    padding: .15em;
+}
+
+button.ang-seg-btn {
+    background-color: transparent;
+    border: .06em solid transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: .25em 1em;
+}
+
+button.ang-seg-btn.ang-seg-active {
+    background-color: @accent-dark;
+    border-color: @accent;
+    box-shadow: 0 0 .6em @glow;
+}
+
+button.ang-seg-btn.ang-seg-active label {
+    color: @accent;
+}
+
+/* ---------- Регулатор + / % / − ---------- */
+.ang-stepper {
+    background-color: @card;
+    border: .06em solid @glow-edge;
+    border-radius: .8em;
+    box-shadow: 0 0 .6em @glow;
+}
+
+button.ang-step-btn {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    font-size: 1.8em;
+    margin: 0;
+}
+
+.ang-step-value {
+    font-size: 1.6em;
+    border-top: .06em solid @lines;
+    border-bottom: .06em solid @lines;
+}
+
+/* ---------- Numpad ---------- */
+.ang-numpad-display {
+    background-color: @bg;
+    border-radius: .5em;
+    font-size: 1.4em;
+    min-height: 2em;
+}
+
+button.ang-numkey {
+    background-color: @card-hi;
+    font-size: 1.2em;
+    margin: 0;
+}
+
+/* ---------- Бутони-опции (скорост) и квадратни ---------- */
+button.ang-option {
+    background-color: @card-hi;
+    border-radius: .5em;
+}
+
+button.ang-option.ang-option-active {
+    background-color: @accent;
+    border-color: @accent;
+    box-shadow: 0 0 .9em @glow-strong;
+}
+
+button.ang-option.ang-option-active label {
+    color: @on-accent;
+    font-weight: bold;
+}
+
+button.ang-square {
+    background-color: @card-hi;
+    font-size: 1.3em;
+}
+
+button.ang-field {
+    background-color: @bg;
+    border: .06em solid @lines;
+    box-shadow: none;
+    border-radius: .4em;
+}
+
+/* ---------- Движение: колона Z ---------- */
+.ang-zcol {
+    background-color: @card-hi;
+    border-radius: .7em;
+}
+
+button.ang-zbtn {
+    background-color: transparent;
+    border: none;
+    border-bottom: .06em solid @card;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    font-size: 1.1em;
+}
+
+/* ---------- AMF ---------- */
+.ang-slot-name {
+    color: @text-dim;
+    font-size: .85em;
+}
+
+.ang-slot-active {
+    color: @accent;
+    font-weight: bold;
+}
+
+popover.ang-popover {
+    background-color: @card-hi;
+    border: .06em solid @glow-edge;
+    border-radius: .6em;
+    box-shadow: 0 0 .8em @glow;
+}
+
+button.ang-menu-item {
+    background-color: @card-press;
+    box-shadow: none;
+    border: none;
+    min-width: 6em;
+    margin: .1em;
+}
+
+button.ang-swatch {
+    border: .12em solid @lines;
+    border-radius: .4em;
+    box-shadow: none;
+    margin: 0;
+}
+
+button.ang-swatch.ang-swatch-active {
+    border-color: @accent;
+    box-shadow: 0 0 .7em @glow-strong;
+}
+
+button.ang-c-FFFFFF { background-color: #FFFFFF; }
+button.ang-c-161616 { background-color: #161616; }
+button.ang-c-8A8A8A { background-color: #8A8A8A; }
+button.ang-c-E53935 { background-color: #E53935; }
+button.ang-c-FF7A1A { background-color: #FF7A1A; }
+button.ang-c-FFD21F { background-color: #FFD21F; }
+button.ang-c-4CAF50 { background-color: #4CAF50; }
+button.ang-c-1E88E5 { background-color: #1E88E5; }
+button.ang-c-3DA5FF { background-color: #3DA5FF; }
+button.ang-c-8E24AA { background-color: #8E24AA; }
+button.ang-c-F06292 { background-color: #F06292; }
+button.ang-c-8D6E63 { background-color: #8D6E63; }
+
+/* ---------- Списък: ▲/▼ ---------- */
+button.ang-scroll-btn {
+    background-color: @card;
+    font-size: 1.4em;
+}
+
+/* ---------- Прогрес по време на печат ---------- */
+progressbar.ang-progress trough {
+    min-height: .8em;
+    background-color: @card-hi;
+    border-radius: 1em;
+}
+
+progressbar.ang-progress progress {
+    min-height: .8em;
+    background-color: @accent;
+    border-radius: 1em;
+    box-shadow: 0 0 .6em @glow-strong;
+}
