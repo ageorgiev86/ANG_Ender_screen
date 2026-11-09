@@ -81,6 +81,10 @@ class FakeGtk:
     img_width = img_height = FS * 3
     _executor = None
 
+    def PixbufFromIcon(self, name, w=None, h=None):
+        p = os.path.join(THEME, "images", name + ".svg")
+        return GdkPixbuf.Pixbuf.new_from_file_at_size(p, int(w or FS * 3), int(h or FS * 3))
+
     def Image(self, name, w=None, h=None):
         p = os.path.join(THEME, "images", name + ".svg")
         if not os.path.exists(p):
@@ -111,6 +115,8 @@ screen = types.SimpleNamespace(
     _send_action=lambda *a, **k: None, state=types.SimpleNamespace(printer_name="ANGEnder"),
 )
 nav_mod = importlib.import_module("ks_addons.ang_ender.nav")
+# в контейнера няма Wi-Fi: показваме примерна връзка
+importlib.import_module("ks_addons.ang_ender.ui").network_status = lambda: ("wifi", 82, "ANG-Home")
 
 PAGES = [
     ("01-home", "ang_home", "home", {}),

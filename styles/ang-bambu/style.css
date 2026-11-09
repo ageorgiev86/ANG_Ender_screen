@@ -729,3 +729,12 @@ progressbar.ang-progress progress {
     border-radius: 1em;
     box-shadow: 0 0 .6em @glow-strong;
 }
+
+/* Начален екран: няма мрежа */
+button.ang-offline image {
+    opacity: .35;
+}
+
+button.ang-offline label {
+    color: @warning;
+}

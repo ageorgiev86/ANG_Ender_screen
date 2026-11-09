@@ -1,7 +1,7 @@
 """Начален екран: рендер на принтера, поздрав, карта „Файлове“, карта за състояние."""
 import os
 
-from gi.repository import Gtk
+from gi.repository import GLib, Gtk
 
 from ks_addons.ang_ender import ui
 from ks_addons.ang_ender.base import AngPanel
@@ -57,29 +57,64 @@ class Panel(AngPanel):
 
         status = Gtk.Box(homogeneous=False, hexpand=True)
         status.get_style_context().add_class("ang-card")
-        self.labels["nozzle"] = self._cell(status, "extruder", "Дюза", lambda *_: self.open("ang_nozzle"))
-        self.labels["bed"] = self._cell(status, "bed", "Легло", lambda *_: self.open("ang_numpad", "Легло", device="heater_bed", render="printer_bed"))
-        self.labels["chamber"] = self._cell(status, "heater", "Камера", lambda *_: self.open("ang_air"))
+        self._temps_cell(status)
         self._amf_cell(status)
+        self._net_cell(status)
         cards.pack_start(status, True, True, 0)
         root.pack_start(cards, False, False, 0)
 
         self.content.add(root)
         self._find_latest_file()
 
-    def _cell(self, parent, icon, caption, cb):
+    def _temps_cell(self, parent):
+        """Един бутон с трите температури (дюза, легло, камера) -> Управление."""
         fs = self._gtk.font_size
         btn = Gtk.Button(hexpand=True, vexpand=True)
         btn.get_style_context().add_class("ang-cell")
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=int(fs * 0.2), valign=Gtk.Align.CENTER)
-        box.add(self._gtk.Image(icon, fs * 1.6, fs * 1.6))
-        val = ui.label("--", "ang-cell-value", xalign=0.5, markup=True)
-        box.add(val)
-        box.add(ui.label(caption, "ang-caption", xalign=0.5))
-        btn.add(box)
-        btn.connect("clicked", cb)
+        grid = Gtk.Grid(row_spacing=int(fs * 0.25), column_spacing=int(fs * 0.5), halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER)
+        for row, (key, icon) in enumerate((("nozzle", "extruder"), ("bed", "bed"), ("chamber", "heater"))):
+            grid.attach(self._gtk.Image(icon, fs * 1.1, fs * 1.1), 0, row, 1, 1)
+            val = ui.label("--", "ang-cell-value", markup=True)
+            grid.attach(val, 1, row, 1, 1)
+            self.labels[key] = val
+        btn.add(grid)
+        btn.connect("clicked", lambda *_: self.open("ang_control"))
         parent.pack_start(btn, True, True, 0)
-        return val
+
+    def _net_cell(self, parent):
+        """Връзка: Wi-Fi със сила на сигнала, кабел или „Няма връзка“ -> страница Мрежа."""
+        fs = self._gtk.font_size
+        btn = Gtk.Button(hexpand=True, vexpand=True)
+        btn.get_style_context().add_class("ang-cell")
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=int(fs * 0.3), valign=Gtk.Align.CENTER)
+        self.net_icon = Gtk.Image(halign=Gtk.Align.CENTER)
+        self.net_lbl = ui.label("Wi-Fi", "ang-caption", xalign=0.5)
+        box.add(self.net_icon)
+        box.add(self.net_lbl)
+        btn.add(box)
+        btn.connect("clicked", lambda *_: self.open("network"))
+        parent.pack_start(btn, True, True, 0)
+        self.net_btn = btn
+        self._net_timer = None
+        self._update_net()
+
+    def _update_net(self):
+        fs = self._gtk.font_size
+        kind, q, name = ui.network_status()
+        ctx = self.net_btn.get_style_context()
+        if kind == "wifi":
+            self.net_icon.set_from_pixbuf(self._gtk.PixbufFromIcon(ui.wifi_icon(q), fs * 1.8, fs * 1.8))
+            self.net_lbl.set_text(name or "Wi-Fi")
+            ctx.remove_class("ang-offline")
+        elif kind == "eth":
+            self.net_icon.set_from_pixbuf(self._gtk.PixbufFromIcon("network", fs * 1.8, fs * 1.8))
+            self.net_lbl.set_text("Кабел")
+            ctx.remove_class("ang-offline")
+        else:
+            self.net_icon.set_from_pixbuf(self._gtk.PixbufFromIcon("wifi_weak", fs * 1.8, fs * 1.8))
+            self.net_lbl.set_text("Няма връзка")
+            ctx.add_class("ang-offline")
+        return True
 
     def _amf_cell(self, parent):
         fs = self._gtk.font_size
@@ -119,6 +154,14 @@ class Panel(AngPanel):
     def activate(self):
         self._find_latest_file()
         self.refresh()
+        self._update_net()
+        if self._net_timer is None:
+            self._net_timer = GLib.timeout_add_seconds(10, self._update_net)
+
+    def deactivate(self):
+        if self._net_timer is not None:
+            GLib.source_remove(self._net_timer)
+            self._net_timer = None
 
     def refresh(self):
         self.labels["nozzle"].set_markup(self.temp_text("extruder"))

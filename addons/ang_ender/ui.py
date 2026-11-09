@@ -446,3 +446,46 @@ class Numpad(Gtk.Grid):
 
     def value(self):
         return int(self.text) if self.text else None
+
+
+def network_status():
+    """(вид, качество 0..100, име) — вид е "wifi", "eth" или None.
+
+    Чете /proc/net/wireless и /sys/class/net (без NetworkManager), за да е леко.
+    """
+    import subprocess
+
+    try:
+        with open("/proc/net/wireless") as f:
+            for line in f.readlines()[2:]:
+                parts = line.split()
+                iface = parts[0].rstrip(":")
+                q = float(parts[2].rstrip("."))
+                if q > 0:
+                    ssid = ""
+                    try:
+                        ssid = subprocess.run(["iwgetid", "-r", iface], capture_output=True, text=True, timeout=1).stdout.strip()
+                    except Exception:
+                        pass
+                    return "wifi", min(100, int(q * 100 / 70)), ssid
+    except Exception:
+        pass
+    try:
+        for iface in os.listdir("/sys/class/net"):
+            if iface.startswith(("eth", "en")):
+                with open(f"/sys/class/net/{iface}/carrier") as f:
+                    if f.read().strip() == "1":
+                        return "eth", 100, iface
+    except Exception:
+        pass
+    return None, 0, ""
+
+
+def wifi_icon(quality):
+    if quality >= 75:
+        return "wifi_excellent"
+    if quality >= 50:
+        return "wifi_good"
+    if quality >= 25:
+        return "wifi_fair"
+    return "wifi_weak"
