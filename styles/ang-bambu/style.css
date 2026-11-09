@@ -11,14 +11,17 @@
 @define-color card        #242424;   /* карти и странична лента */
 @define-color card-hi     #333333;   /* вътрешни елементи, кръгове зад икони */
 @define-color card-press  #3D3D3D;
-@define-color accent      #A5F960;   /* лайм акцент */
-@define-color accent-dark #1F2A17;   /* тъмнозелен фон на избран елемент */
-@define-color on-accent   #141414;   /* текст върху лайм */
+@define-color accent      #3DA5FF;   /* син акцент */
+@define-color accent-dark #0F2438;   /* тъмносин фон на избран елемент */
+@define-color on-accent   #0B1520;   /* текст/копче върху синьо */
+@define-color glow        rgba(61, 165, 255, 0.28);
+@define-color glow-strong rgba(61, 165, 255, 0.60);
+@define-color glow-edge   rgba(61, 165, 255, 0.35);
 @define-color hot         #FF6A3D;   /* дюза */
 @define-color bed         #2F9BFF;   /* легло */
-@define-color fanc        #A5F960;
+@define-color fanc        #3DA5FF;
 
-@define-color echo    #5FB83A;
+@define-color echo    #2E8BD8;
 @define-color warning #F5A623;
 @define-color error   #E5484D;
 
@@ -43,15 +46,20 @@ label {
     color: @text;
 }
 
-/* ---------- Бутони (плочки) ---------- */
+/* ---------- Бутони (плочки) със синьо сияние ---------- */
 button {
     background-color: @card;
     background-image: none;
-    border: none;
+    border: .06em solid @glow-edge;
     border-radius: .7em;
-    margin: .2em;
+    margin: .3em;
     padding: .3em;
-    box-shadow: none;
+    box-shadow: 0 0 .55em @glow;
+}
+
+button:active {
+    box-shadow: 0 0 .9em @glow-strong;
+    border-color: @accent;
 }
 
 button:hover {
@@ -71,8 +79,9 @@ button.color2,
 button.color3,
 button.color4 {
     background-color: @card;
-    border: none;
+    border: .06em solid @glow-edge;
     border-radius: .7em;
+    box-shadow: 0 0 .55em @glow;
 }
 
 button.color1:active,
@@ -91,6 +100,7 @@ button.color4.button_active,
     background-color: @accent-dark;
     border: .1em solid @accent;
     border-radius: .7em;
+    box-shadow: 0 0 .9em @glow-strong;
 }
 
 .button_active label {
@@ -129,6 +139,8 @@ button.invalid { border-bottom-color: @error; }
 
 .action_bar button {
     background-color: transparent;
+    border: none;
+    box-shadow: none;
     border-radius: .6em;
 }
 
@@ -362,4 +374,67 @@ switch:checked slider {
 
 switch:checked {
     color: @on-accent;
+}
+
+/* ---------- Начален екран (добавка ang_ender) ---------- */
+.ang-home {
+    padding: .4em .5em .5em .3em;
+}
+
+.ang-accent-bar {
+    background-color: @accent;
+    border-radius: .2em;
+    box-shadow: 0 0 .6em @glow-strong;
+}
+
+.ang-greeting {
+    font-size: 1.55em;
+    color: @text;
+}
+
+.ang-sub {
+    color: @text-dim;
+}
+
+button.ang-card,
+.ang-card {
+    background-color: @card;
+    border: .06em solid @glow-edge;
+    border-radius: .8em;
+    box-shadow: 0 0 .7em @glow;
+    margin: .25em;
+}
+
+button.ang-card:active {
+    box-shadow: 0 0 1em @glow-strong;
+    border-color: @accent;
+}
+
+.ang-card-title {
+    font-size: 1.2em;
+    color: @text;
+}
+
+/* клетките в картата за състояние: без собствена рамка, тънки разделители */
+button.ang-cell {
+    background-color: transparent;
+    border: none;
+    border-left: .06em solid @lines;
+    border-radius: 0;
+    box-shadow: none;
+    margin: .6em 0;
+}
+
+button.ang-cell:first-child {
+    border-left: none;
+}
+
+button.ang-cell:active {
+    background-color: @card-hi;
+    border-radius: .5em;
+}
+
+.ang-cell-value {
+    font-size: 1.1em;
+    color: @text;
 }

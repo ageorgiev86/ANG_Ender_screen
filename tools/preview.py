@@ -18,7 +18,7 @@ os.chdir(KS)
 css = open(BASE).read().replace("KS_FONT_SIZE", f"{FS}")
 css += open(os.path.join(THEME_DIR, "style.css")).read()
 # KlipperScreen sets these per device from style.conf graph_colors; emulate:
-css += ".gl-hot{border-left-color:#FF6A3D}.gl-bed{border-left-color:#2F9BFF}.gl-fan{border-left-color:#A5F960}.gl-x{border-left-color:#FFB020}"
+css += ".gl-hot{border-left-color:#FF6A3D}.gl-bed{border-left-color:#2F9BFF}.gl-fan{border-left-color:#3DA5FF}.gl-x{border-left-color:#FFB020}"
 css = css.replace("./styles/ang-bambu/", THEME_DIR.rstrip("/") + "/")
 prov = Gtk.CssProvider()
 prov.load_from_data(css.encode())
