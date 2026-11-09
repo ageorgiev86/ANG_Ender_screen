@@ -11,7 +11,9 @@ from ks_addons.ang_ender.config import AMF_DEFAULT_SLOTS
 
 # Къде лежат макарите върху amf_unit.png: ляв/десен отстъп и горе/долу (относително 0..1).
 # Нагласи ги, когато сложиш истинския рендер на корпуса.
-SPOOL_AREA = (0.06, 0.20, 0.06, 0.16)  # left, right, top, bottom
+HUMIDITY_WARN = 30  # % — над това влажността се оцветява в оранжево
+
+SPOOL_AREA = (0.06, 0.06, 0.06, 0.16)  # left, right, top, bottom
 
 
 class PathLines(Gtk.DrawingArea):
@@ -32,7 +34,7 @@ class PathLines(Gtk.DrawingArea):
             return (r[0], r[1]) if r else (0, 0)
 
         hx, hy = pos(p.head, 0.5, 0.0)
-        _, box_bottom = pos(p.unit_ov, 0, 1.0)
+        _, box_bottom = pos(p.info_row, 0, 1.0)
         hub_y = box_bottom + (hy - box_bottom) * 0.45
         cr.set_line_width(2)
         for i, sp in enumerate(p.spools):
@@ -110,14 +112,33 @@ class Panel(AngPanel):
             self.names.append(name)
         self.unit_ov.add_overlay(spools_box)
         # влажност вдясно в корпуса
-        hum = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, halign=Gtk.Align.END, valign=Gtk.Align.CENTER)
-        hum.set_margin_end(int(unit_w * 0.04))
-        self.drop = ui.HumidityDrop(int(fs * 1.6), int(fs * 2.2))
-        hum.add(self.drop)
-        self.hum_lbl = ui.label("--", "ang-caption-strong", xalign=0.5, markup=True)
-        hum.add(self.hum_lbl)
-        self.unit_ov.add_overlay(hum)
-        row.pack_start(self.unit_ov, False, False, int(cw * 0.04))
+        # под всеки слот: собствена влажност и сушене (всеки слот има свой сензор и нагревател)
+        unit_col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=int(fs * 0.2))
+        unit_col.add(self.unit_ov)
+        self.info_row = Gtk.Box(homogeneous=True, spacing=int(fs * 0.3))
+        self.info_row.set_margin_start(int(unit_w * l))
+        self.info_row.set_margin_end(int(unit_w * r))
+        self.drops, self.hum_lbls, self.dry_lbls = [], [], []
+        for i in range(n):
+            cell = Gtk.Button()
+            cell.get_style_context().add_class("ang-slot-info")
+            cv = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            hrow = Gtk.Box(spacing=int(fs * 0.2), halign=Gtk.Align.CENTER)
+            drop = ui.HumidityDrop(int(fs * 0.8), int(fs * 1.1))
+            hl = ui.label("--", "ang-caption-strong", markup=True)
+            hrow.add(drop)
+            hrow.add(hl)
+            cv.add(hrow)
+            dl = ui.label("", "ang-drying", xalign=0.5)
+            cv.add(dl)
+            cell.add(cv)
+            cell.connect("clicked", lambda w, k=i: self._dry(k))
+            self.info_row.add(cell)
+            self.drops.append(drop)
+            self.hum_lbls.append(hl)
+            self.dry_lbls.append(dl)
+        unit_col.add(self.info_row)
+        row.pack_start(unit_col, False, False, int(cw * 0.04))
 
         # външна макара
         ext_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, valign=Gtk.Align.CENTER)
@@ -139,7 +160,7 @@ class Panel(AngPanel):
         actions = Gtk.Box(spacing=int(fs * 0.4), halign=Gtk.Align.END, valign=Gtk.Align.END, hexpand=True)
         dry = Gtk.Button(label="Сушене")
         dry.get_style_context().add_class("ang-secondary")
-        dry.connect("clicked", lambda *_: self.open("ang_amf_dry", "Сушене и влажност", slot=0))
+        dry.connect("clicked", lambda *_: self.open("ang_amf_dry", "Сушене и влажност", slot=self.active if isinstance(self.active, int) else 0))
         actions.add(dry)
         bottom.pack_start(actions, True, True, 0)
         col.pack_start(bottom, True, True, 0)
@@ -188,7 +209,6 @@ class Panel(AngPanel):
     def refresh(self):
         slots = self.stat("amf", "slots", {}) or {}
         self.active = self.stat("amf", "active_slot")
-        hums = []
         for i, sp in enumerate(self.spools):
             s = slots.get(str(i)) or {}
             present = s.get("filament")
@@ -197,12 +217,16 @@ class Panel(AngPanel):
             self.mats[i].set_text(s.get("profile") or ("?" if present else ""))
             ctx = self.names[i].get_style_context()
             (ctx.add_class if self.active == i else ctx.remove_class)("ang-slot-active")
-            if s.get("humidity") is not None and s.get("online"):
-                hums.append(s["humidity"])
-        if hums:
-            h = max(hums)
-            self.drop.set_level(h)
-            self.hum_lbl.set_markup(ui.value_markup(f"{h:.0f}", "%"))
+            h = s.get("humidity") if s.get("online", True) else None
+            self.drops[i].set_level(h)
+            self.hum_lbls[i].set_markup(ui.value_markup(f"{h:.0f}", "%") if h is not None else "--")
+            dctx = self.hum_lbls[i].get_style_context()
+            (dctx.add_class if h is not None and h >= HUMIDITY_WARN else dctx.remove_class)("ang-humid")
+            if s.get("drying"):
+                t, tg = s.get("temperature"), s.get("target_temp")
+                self.dry_lbls[i].set_text(f"♨ {t:.0f}/{tg:.0f}℃" if t is not None and tg else "♨ суши")
+            else:
+                self.dry_lbls[i].set_text("")
         self.lines.queue_draw()
 
     def activate(self):

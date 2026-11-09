@@ -738,3 +738,21 @@ button.ang-offline image {
 button.ang-offline label {
     color: @warning;
 }
+
+/* AMF: влажност и сушене под всеки слот */
+button.ang-slot-info {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    padding: .1em 0;
+}
+
+.ang-drying {
+    color: @hot;
+    font-size: .8em;
+}
+
+.ang-humid {
+    color: @warning;
+}

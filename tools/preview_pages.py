@@ -55,7 +55,7 @@ DATA = {
         "slots": {
             "0": {"filament": True, "color": "F2F2F2", "profile": "PLA", "humidity": 18, "online": True, "temperature": 26},
             "1": {"filament": True, "color": "3DA5FF", "profile": "PETG", "humidity": 22, "online": True, "temperature": 26},
-            "2": {"filament": True, "color": "FF7A1A", "profile": "PLA", "humidity": 19, "online": True, "temperature": 26},
+            "2": {"filament": True, "color": "FF7A1A", "profile": "PLA", "humidity": 34, "online": True, "temperature": 48, "target_temp": 55, "drying": True},
             "3": {"filament": False, "online": True, "humidity": 20},
         },
     },
