@@ -341,8 +341,12 @@ class Panel(AngPanel):
         # съобщение под прогреса: M117 от слайсера/макросите или състоянието
         msg = self.stat("display_status", "message") or ""
         text = STATE_TEXT.get(self.state, self.state or "")
-        if self.state == "printing" and msg:
-            text = msg
+        if self.state == "printing":
+            heating = self._heating()
+            if msg:
+                text = msg
+            elif heating:
+                text = heating
         self.state_lbl.set_text(("✓ " if self.state == "complete" else "") + text)
 
         # върху рендерите само текущата температура, както при Bambu
@@ -350,6 +354,14 @@ class Panel(AngPanel):
             t = self.stat(obj, "temperature")
             self.tag[key].set_markup(ui.value_markup(f"{t:.0f}", "℃") if t is not None else "--")
         self.head_render.set_layer("heat", (self.stat("extruder", "target", 0) or 0) > 0)
+
+    def _heating(self):
+        """„Загряване на …“, докато някой нагревател е под зададената температура."""
+        for obj, name in (("heater_bed", "леглото"), ("extruder", "дюзата"), (CHAMBER_SENSOR, "камерата")):
+            t, tg = self.stat(obj, "temperature"), self.stat(obj, "target")
+            if t is not None and tg and t < tg - 3:
+                return f"Загряване на {name}  {t:.0f}/{tg:.0f}℃"
+        return None
 
     def activate(self):
         self.refresh()
