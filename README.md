@@ -38,6 +38,9 @@ xvfb-run -a -s "-screen 0 800x480x24" python3 tools/preview_pages.py ~/KlipperSc
 ```
 
 ## Инсталация
+Изисква **KlipperScreen v0.4.8 или по-нов** (тогава са въведени добавките, `enable_addons`).
+По-стара версия спира с „Option enable_addons not recognized“ — обнови с `cd ~/KlipperScreen && git pull`.
+
 На Raspberry Pi-то с KlipperScreen:
 
 ```bash
@@ -59,6 +62,15 @@ theme: ang-bambu
 font_size: small
 enable_addons: True
 ```
+
+Ако темата не се прилага: KlipperScreen пази настройките, сменени от екрана, най-долу в
+`KlipperScreen.conf` (под `#~# --- Do not edit below this line ---`) и те надделяват. Провери:
+
+```bash
+grep -n "theme" ~/printer_data/config/KlipperScreen.conf
+```
+
+Ред `#~# theme = ...` трябва също да е `ang-bambu`.
 
 Обновяване:
 
