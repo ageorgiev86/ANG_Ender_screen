@@ -9,10 +9,11 @@ from ks_addons.ang_ender.config import AIR_MODES, CHAMBER_SENSOR, FANS
 # Нагласи ги, когато сложиш истинския рендер.
 POINTS = {
     "part": (0.42, 0.28),
+    "chamber": (0.80, 0.45),
     "aux": (0.25, 0.62),
     "exhaust": (0.82, 0.30),
     "heat": (0.82, 0.70),
-    "chamber": (0.55, 0.85),
+    "_temp": (0.55, 0.85),  # температура на камерата
 }
 
 
@@ -24,13 +25,13 @@ class Panel(AngPanel):
         cw, ch = gtk.content_width, gtk.content_height
 
         root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=int(fs * 0.4))
-        root.add(ui.page_header("Въздух: режими и вентилатори", self.back))
+        root.add(ui.page_header("Въздух: режими и вентилатори" if AIR_MODES else "Въздух и вентилатори", self.back))
 
         card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=int(fs * 0.3), vexpand=True)
         card.get_style_context().add_class("ang-card")
         card.get_style_context().add_class("ang-pad")
 
-        seg = Gtk.Box(halign=Gtk.Align.START)
+        seg = Gtk.Box(halign=Gtk.Align.START, no_show_all=not AIR_MODES)
         seg.get_style_context().add_class("ang-segment")
         self.mode_btns = []
         for i, (name, macro) in enumerate(AIR_MODES):
@@ -57,14 +58,15 @@ class Panel(AngPanel):
         ov.set_overlay_pass_through(self.leaders, True)
 
         self.vals = {}
-        for key, side in (("part", left), ("aux", left), ("exhaust", right), ("heat", right)):
-            obj, name, layer = FANS[key]
+        # вентилаторите от config.FANS се редуват вляво/вдясно; температурата е вдясно
+        for i, (key, (obj, name, layer)) in enumerate(FANS.items()):
+            side = left if i % 2 == 0 else right
             w = self._fan_label(name, key)
             side.add(w)
-            self.leaders.link(*POINTS[key], w, "left" if side is left else "right")
+            self.leaders.link(*POINTS.get(key, (0.5, 0.5)), w, "left" if side is left else "right")
         w = self._fan_label("Камера", None)
         right.add(w)
-        self.leaders.link(*POINTS["chamber"], w, "right")
+        self.leaders.link(*POINTS["_temp"], w, "right")
 
         card.pack_start(ov, True, True, 0)
         root.pack_start(card, True, True, 0)
@@ -83,7 +85,7 @@ class Panel(AngPanel):
             btn.connect("clicked", lambda *_: self.open("ang_fan", FANS[key][1], fan=key))
         else:
             btn.connect("clicked", lambda *_: self.open("ang_numpad", "Камера", device="chamber", render="printer_section"))
-        self.vals[key or "chamber"] = v
+        self.vals[key or "_temp"] = v
         return btn
 
     def _mode(self, w, i):
@@ -108,8 +110,7 @@ class Panel(AngPanel):
             else:
                 self.vals[key].set_markup(ui.value_markup(f"{speed * 100:.0f}", "%"))
                 self.render.set_layer(layer, True)
-        t = self.stat(CHAMBER_SENSOR, "temperature")
-        self.vals["chamber"].set_markup(ui.value_markup(f"{t:.0f}", "℃") if t is not None else "--")
+        self.vals["_temp"].set_markup(self.temp_text(CHAMBER_SENSOR))
         self.leaders.queue_draw()
 
     def activate(self):

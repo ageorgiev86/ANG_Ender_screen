@@ -43,7 +43,7 @@ class Panel(AngPanel):
         files = Gtk.Button()
         files.get_style_context().add_class("ang-card")
         files.set_size_request(int(cw * 0.36), -1)
-        files.connect("clicked", lambda *_: self.open("print"))
+        files.connect("clicked", lambda *_: self.open("gcodes"))
         fbox = Gtk.Box(spacing=int(fs * 0.6), halign=Gtk.Align.CENTER)
         # рендер files_card.png, ако го има; иначе нашата рисунка на корабче
         self.labels["thumb"] = self._files_art(int(fs * 6.0), int(fs * 4.6))

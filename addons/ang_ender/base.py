@@ -41,7 +41,23 @@ class AngPanel(ScreenPanel):
             logging.exception("ang_ender: gcode failed")
 
     def open(self, panel, title=None, **kw):
+        # KlipperScreen пази отворените страници по име. Страница с параметри
+        # (кой нагревател, кой вентилатор, кой слот) получава собствено име,
+        # иначе би се показала старата.
+        if kw and "panel_name" not in kw:
+            key = "_".join(str(v) for v in kw.values() if isinstance(v, (str, int)))
+            kw["panel_name"] = f"{panel}_{key}" if key else panel
         self._screen.show_panel(panel, title, **kw)
+
+    def light_on(self, obj):
+        """output_pin -> value; neopixel/led -> някой канал > 0."""
+        val = self.stat(obj, "value")
+        if val is not None:
+            return val > 0
+        data = self.stat(obj, "color_data")
+        if data:
+            return any(c > 0 for px in data for c in px)
+        return None
 
     def back(self, *args):
         self._screen._menu_go_back()

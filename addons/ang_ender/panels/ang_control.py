@@ -3,7 +3,7 @@ from gi.repository import Gtk
 
 from ks_addons.ang_ender import ui
 from ks_addons.ang_ender.base import AngPanel
-from ks_addons.ang_ender.config import AIR_MODES, CHAMBER_SENSOR, LIGHT_OBJECT, LIGHT_OFF, LIGHT_ON
+from ks_addons.ang_ender.config import AIR_MODES, CHAMBER_SENSOR, FANS, LIGHT_OBJECT, LIGHT_OFF, LIGHT_ON
 
 
 class Panel(AngPanel):
@@ -67,12 +67,16 @@ class Panel(AngPanel):
         self.v["speed"].set_text(f"{speed * 100:.0f}%")
         homed = self.stat("toolhead", "homed_axes", "") or ""
         self.v["motion"].set_text(homed.upper() if homed else "Не е нулиран")
-        mode = getattr(self._screen, "ang_air_mode", 0)
-        self.v["air"].set_text(AIR_MODES[mode][0])
-        val = self.stat(LIGHT_OBJECT, "value")
-        if val is not None:
+        if AIR_MODES:
+            mode = getattr(self._screen, "ang_air_mode", 0)
+            self.v["air"].set_text(AIR_MODES[mode][0])
+        else:
+            running = [k for k, (obj, _, _) in FANS.items() if k != "part" and (self.stat(obj, "speed") or 0) > 0]
+            self.v["air"].set_text("Вентилация" if running else "Изключен")
+        on = self.light_on(LIGHT_OBJECT)
+        if on is not None:
             self._updating = True
-            self.light.set_active(val > 0)
+            self.light.set_active(on)
             self._updating = False
 
     def activate(self):

@@ -40,7 +40,7 @@ class Panel(AngPanel):
 
         rows = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=sp)
         self.net = self._row(rows, "Мрежа", "", lambda *_: self.open("network"))
-        self._row(rows, "Файлове", "", lambda *_: self.open("print"))
+        self._row(rows, "Файлове", "", lambda *_: self.open("gcodes"))
         self.ver = self._row(rows, "Система", "", lambda *_: self.open("system"))
         self._row(rows, "Изключване", "", lambda *_: self.open("shutdown"))
         grid.attach(rows, 1, 0, 2, 1)

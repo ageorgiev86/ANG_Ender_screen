@@ -31,13 +31,19 @@ class Nav:
             self.box.pack_start(b, True, True, 0)
             self.buttons[key] = b
         if estop_cb:
+            # празно място, за да не е авариен стоп точно под „Съобщения“
+            self.box.set_homogeneous(False)
+            for b in self.buttons.values():
+                b.set_size_request(-1, int(gtk.font_size * 3.2))
+            self.box.pack_start(Gtk.Box(vexpand=True), True, True, 0)
             e = Gtk.Button()
             e.get_style_context().add_class("ang-nav-btn")
             e.get_style_context().add_class("ang-nav-estop")
             e.set_image(gtk.Image("emergency", size, size))
             e.set_always_show_image(True)
             e.connect("clicked", estop_cb)
-            self.box.pack_start(e, True, True, 0)
+            e.set_size_request(-1, int(gtk.font_size * 3.2))
+            self.box.pack_start(e, False, False, 0)
         self.set_active("home")
 
     def _go(self, w, panel):

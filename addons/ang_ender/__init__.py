@@ -50,7 +50,11 @@ def _install_nav(screen):
     from .nav import Nav
 
     bp = screen.base_panel
-    nav = Nav(screen, screen.gtk, estop_cb=bp.emergency_stop)
+    def estop(widget):
+        # винаги с потвърждение: бутонът е в навигацията, лесно се натиска по погрешка
+        screen._confirm_send_action(widget, "Аварийно спиране на принтера?", "printer.emergency_stop")
+
+    nav = Nav(screen, screen.gtk, estop_cb=estop)
     # махаме стандартните бутони от лентата (обектите остават в bp.control,
     # за да може KlipperScreen да им сменя видимостта без грешки)
     for key in ("home", "printer_select", "shortcut", "estop", "shutdown"):
