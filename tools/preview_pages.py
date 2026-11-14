@@ -43,6 +43,7 @@ DATA = {
     "neopixel bed_leds": {"color_data": [[1.0, 1.0, 1.0, 0.0]] * 17},
     "gcode_move": {"speed_factor": 1.0},
     "toolhead": {"homed_axes": "xyz"},
+    "display_status": {"message": "Печат… слой 42"},
     "print_stats": {"state": "printing", "filename": "benchy_0.2mm_PETG.gcode", "print_duration": 2280,
                     "info": {"current_layer": 42, "total_layer": 120}},
     "virtual_sdcard": {"progress": 0.37},
@@ -107,6 +108,9 @@ class Files:
     def has_thumbnail(self, f):
         return False
 
+    def get_file_info(self, f):
+        return {"estimated_time": 6100}
+
 
 screen = types.SimpleNamespace(
     _config=Cfg(), files=Files(), printer=Printer(), gtk=FakeGtk(),
@@ -133,6 +137,7 @@ PAGES = [
     ("12-device", "ang_device", "device", {}),
     ("13-calibration", "ang_list", "device", {"title": "Калибрация", "items": [("Карта на леглото", ""), ("Z отместване", ""), ("Input shaper", ""), ("Pressure advance", "")]}),
     ("14-printing", "ang_job", "home", {}),
+    ("15-print-done", "ang_job", "home", {"_state": "complete"}),
 ]
 if ONLY:
     PAGES = [p for p in PAGES if p[0] in ONLY or p[1] in ONLY]
@@ -142,12 +147,17 @@ def build(module, kwargs):
     kwargs = dict(kwargs)
     title = kwargs.pop("title", None)
     page = kwargs.pop("_page", None)
+    state = kwargs.pop("_state", None)
+    if state:
+        DATA["print_stats"]["state"] = state
     mod = importlib.import_module(f"ks_addons.ang_ender.panels.{module}")
     panel = mod.Panel(screen, title, **kwargs)
     if page is not None:
         panel._goto(None, page)
     if hasattr(panel, "process_update"):
         panel.process_update("notify_status_update", DATA)
+    if state:
+        DATA["print_stats"]["state"] = "printing"
     return panel
 
 

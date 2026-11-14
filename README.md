@@ -16,7 +16,7 @@
 - страници: начало, управление, въздух, вентилатор, дюза и екструдер, температура (numpad), движение, скорост, AMF, редакция на слот, сушене, устройство, списъци (калибрация, инструменти), печат
 - местата за рендери се попълват сами, щом сложиш PNG файловете — [docs/RENDERS.md](docs/RENDERS.md)
 - имената на обектите в Klipper (камера, вентилатори, светлина) са в `addons/ang_ender/config.py`
-- екранът по време на печат (`ang_job`) е готов, но още **не** замества стандартния — включва се в `OVERRIDES` в `addons/ang_ender/__init__.py`
+- екранът по време на печат (`ang_job`, по подредбата на H2S) замества стандартния; стандартният се връща, като се закоментира `job_status` в `OVERRIDES` в `addons/ang_ender/__init__.py`
 
 ## Как изглежда
 Снимки 800×480 от истинския код на страниците с изкуствени данни за принтера (`tools/preview_pages.py`).
@@ -29,7 +29,7 @@
 | ![](docs/preview/07-motion.png) | ![](docs/preview/08-speed.png) | ![](docs/preview/09-amf.png) |
 | ![](docs/preview/09b-amf-page2.png) | | |
 | ![](docs/preview/10-amf-edit.png) | ![](docs/preview/11-amf-dry.png) | ![](docs/preview/12-device.png) |
-| ![](docs/preview/13-calibration.png) | ![](docs/preview/14-printing.png) | |
+| ![](docs/preview/13-calibration.png) | ![](docs/preview/14-printing.png) | ![](docs/preview/15-print-done.png) |
 
 Прегенериране (нужни са GTK3, python3-gi-cairo и Xvfb):
 

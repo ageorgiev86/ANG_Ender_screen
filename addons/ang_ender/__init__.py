@@ -11,11 +11,11 @@
 import importlib
 import logging
 
-# Стандартен панел -> наш модул. job_status е изключен, докато ang_job не бъде
-# изпробван на истински печат.
+# Стандартен панел -> наш модул. За да върнеш стандартния екран по време на
+# печат, закоментирай реда за job_status.
 OVERRIDES = {
     "main_menu": "ang_home",
-    # "job_status": "ang_job",
+    "job_status": "ang_job",
 }
 
 

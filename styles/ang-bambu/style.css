@@ -756,3 +756,75 @@ button.ang-slot-info {
 .ang-humid {
     color: @warning;
 }
+
+/* ---------- Екран по време на печат (H2S подредба) ---------- */
+button.ang-link {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    margin: .4em .5em;
+    padding: .1em .3em;
+}
+
+button.ang-link label {
+    color: @text-dim;
+    font-size: .85em;
+}
+
+.ang-thumb-name {
+    margin: 0 .8em .6em .8em;
+    font-size: .85em;
+}
+
+button.ang-temp-tag {
+    background-color: rgba(20, 20, 20, 0.80);
+    border: .06em solid @glow-edge;
+    border-radius: 1em;
+    box-shadow: 0 0 .5em @glow;
+    padding: .05em .45em;
+    margin: 0;
+}
+
+.ang-tag-value {
+    color: @text;
+    font-size: .95em;
+}
+
+.ang-job-pct {
+    color: @text;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.ang-job-state        { color: @text; }
+.ang-job-state.ang-job-ok     { color: @accent; font-weight: bold; }
+.ang-job-state.ang-job-err    { color: @error; font-weight: bold; }
+.ang-job-state.ang-job-paused { color: @warning; }
+
+.ang-btn-group {
+    padding: .3em;
+}
+
+button.ang-square-btn {
+    background-color: @card-hi;
+    border: none;
+    border-radius: .6em;
+    box-shadow: none;
+    margin: 0;
+}
+
+button.ang-square-btn:active {
+    background-color: @card-press;
+    box-shadow: 0 0 .7em @glow-strong;
+}
+
+button.ang-square-btn.ang-square-primary {
+    background-color: @accent-dark;
+    border: .06em solid @accent;
+    box-shadow: 0 0 .6em @glow;
+}
+
+.ang-stop-square {
+    background-color: @error;
+    border-radius: .2em;
+}

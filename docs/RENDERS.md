@@ -39,5 +39,7 @@
 ## Нагласяне след като сложиш рендерите
 - **AMF:** къде лежат макарите върху `amf_unit.png` — `SPOOL_AREA` в `addons/ang_ender/panels/ang_amf.py`
   (отстъп ляво, дясно, горе, долу като част от ширината/височината).
+- **Печат:** къде стоят етикетите с температурите върху `printer_section.png` (камера, легло) и `toolhead.png`
+  (дюза) — `TAGS` в `addons/ang_ender/panels/ang_job.py`.
 - **Въздух:** точките, от които тръгват пунктирните линии към всеки вентилатор — `POINTS`
   в `addons/ang_ender/panels/ang_air.py` (x, y от 0 до 1 върху `printer_section.png`).
