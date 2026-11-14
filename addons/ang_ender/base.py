@@ -44,9 +44,10 @@ class AngPanel(ScreenPanel):
         # KlipperScreen пази отворените страници по име. Страница с параметри
         # (кой нагревател, кой вентилатор, кой слот) получава собствено име,
         # иначе би се показала старата.
-        if kw and "panel_name" not in kw:
-            key = "_".join(str(v) for v in kw.values() if isinstance(v, (str, int)))
-            kw["panel_name"] = f"{panel}_{key}" if key else panel
+        if (kw or title) and "panel_name" not in kw:
+            parts = [title] if title else []
+            parts += [str(v) for v in kw.values() if isinstance(v, (str, int))]
+            kw["panel_name"] = "_".join([panel] + parts)
         self._screen.show_panel(panel, title, **kw)
 
     def light_on(self, obj):
