@@ -81,6 +81,19 @@ class FakeGtk:
     img_width = img_height = FS * 3
     _executor = None
 
+    def Button(self, image_name=None, label=None, style=None, **kw):
+        b = Gtk.Button(label=label)
+        if image_name:
+            b.set_image(self.Image(image_name, FS * 1.4, FS * 1.4))
+            b.set_always_show_image(True)
+            b.set_image_position(Gtk.PositionType.TOP)
+        if style:
+            b.get_style_context().add_class(style)
+        return b
+
+    def ScrolledWindow(self, **kw):
+        return Gtk.ScrolledWindow(hexpand=True, vexpand=True)
+
     def PixbufFromIcon(self, name, w=None, h=None):
         p = os.path.join(THEME, "images", name + ".svg")
         return GdkPixbuf.Pixbuf.new_from_file_at_size(p, int(w or FS * 3), int(h or FS * 3))
@@ -113,9 +126,9 @@ class Files:
 
 
 screen = types.SimpleNamespace(
-    _config=Cfg(), files=Files(), printer=Printer(), gtk=FakeGtk(),
+    _config=Cfg(), files=Files(), _go_to_submenu=lambda *a: None, printer=Printer(), gtk=FakeGtk(),
     show_panel=lambda *a, **k: None, _menu_go_back=lambda *a, **k: None,
-    _send_action=lambda *a, **k: None, state=types.SimpleNamespace(printer_name="ANGEnder"),
+    _send_action=lambda *a, **k: None, state=types.SimpleNamespace(printer_name="ANGEnder", connected=True, initialized=False, reinit_count=0, klippy_retry_count=0, connecting=True), MAX_RETRIES=4,
 )
 nav_mod = importlib.import_module("ks_addons.ang_ender.nav")
 # в контейнера няма Wi-Fi: показваме примерна връзка
@@ -138,6 +151,7 @@ PAGES = [
     ("13-calibration", "ang_list", "device", {"title": "Калибрация", "items": [("Карта на леглото", ""), ("Z отместване", ""), ("Input shaper", ""), ("Pressure advance", "")]}),
     ("14-printing", "ang_job", "home", {}),
     ("15-print-done", "ang_job", "home", {"_state": "complete"}),
+    ("16-splash", "ang_splash", "home", {}),
 ]
 if ONLY:
     PAGES = [p for p in PAGES if p[0] in ONLY or p[1] in ONLY]

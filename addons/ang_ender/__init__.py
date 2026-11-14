@@ -16,6 +16,7 @@ import logging
 OVERRIDES = {
     "main_menu": "ang_home",
     "job_status": "ang_job",
+    "splash_screen": "ang_splash",
 }
 
 

@@ -30,6 +30,7 @@
 | ![](docs/preview/09b-amf-page2.png) | | |
 | ![](docs/preview/10-amf-edit.png) | ![](docs/preview/11-amf-dry.png) | ![](docs/preview/12-device.png) |
 | ![](docs/preview/13-calibration.png) | ![](docs/preview/14-printing.png) | ![](docs/preview/15-print-done.png) |
+| ![](docs/preview/16-splash.png) | | |
 
 Прегенериране (нужни са GTK3, python3-gi-cairo и Xvfb):
 
@@ -77,6 +78,16 @@ grep -n "theme" ~/printer_data/config/KlipperScreen.conf
 ```bash
 cd ~/ANG_Ender_screen && git pull
 ```
+
+## Лого при пускане
+- Екранът „Свързване с Klipper“ показва логото от `addons/ang_ender/assets/logo.png` (или `logo.svg`), бяло с прозрачен фон.
+- Логото и при зареждане на Linux (вместо текст и малинки):
+
+```bash
+sudo ~/ANG_Ender_screen/tools/install_bootsplash.sh
+```
+
+Скриптът прави копия на `/boot/firmware/config.txt` и `cmdline.txt` (`*.bak-ang`) и показва как да се върнат.
 
 ## План
 - [x] Тема: цветове и форми
