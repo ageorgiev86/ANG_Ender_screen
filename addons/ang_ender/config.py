@@ -27,6 +27,10 @@ LIGHT_OBJECT = "neopixel bed_leds"
 LIGHT_ON = "SET_LED LED=bed_leds RED=1 GREEN=1 BLUE=1"
 LIGHT_OFF = "LED_OFF"
 
+# Какво се движи по Z: "gantry" (порталът, както на Ender 3) или "bed"
+# (леглото, след CoreXY преработката). Определя посоката на стрелките ↑/↓.
+Z_MOVES = "gantry"
+
 # Режими на скорост (M220)
 SPEED_MODES = [
     ("Луд", 166),

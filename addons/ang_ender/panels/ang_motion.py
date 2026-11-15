@@ -6,6 +6,7 @@ from gi.repository import Gdk, Gtk
 
 from ks_addons.ang_ender import ui
 from ks_addons.ang_ender.base import AngPanel
+from ks_addons.ang_ender.config import Z_MOVES
 
 FEED_XY = 6000
 FEED_Z = 600
@@ -147,11 +148,13 @@ class Panel(AngPanel):
 
         right = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=int(fs * 0.3))
         right.set_size_request(int(cw * 0.32), -1)
-        right.add(ui.label("Легло", "ang-caption", xalign=0.5))
+        right.add(ui.label("Легло" if Z_MOVES == "bed" else "Портал (Z)", "ang-caption", xalign=0.5))
         zcol = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, vexpand=True)
         zcol.get_style_context().add_class("ang-zcol")
-        # CoreXY: леглото се движи по Z; "↑" вдига леглото към дюзата (Z намалява)
-        for txt, dz in (("↑  10", -10), ("↑  1", -1), ("↓  1", 1), ("↓  10", 10)):
+        # „↑“ винаги движи видимо нагоре: порталът нагоре = +Z;
+        # леглото нагоре (към дюзата) = −Z
+        sign = -1 if Z_MOVES == "bed" else 1
+        for txt, dz in (("↑  10", 10 * sign), ("↑  1", 1 * sign), ("↓  1", -1 * sign), ("↓  10", -10 * sign)):
             b = Gtk.Button(label=txt, vexpand=True)
             b.get_style_context().add_class("ang-zbtn")
             b.connect("clicked", lambda w, d=dz: self._move("Z", d))
